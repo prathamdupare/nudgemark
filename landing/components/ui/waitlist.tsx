@@ -53,10 +53,12 @@ export default function Waitlist() {
             </div>
           </div>
 
-          <Button variant="default" className="bg-white p-6" type="submit">
-            <span className="bg-gradient-to-r from-[#D247BF] to-primary text-white font-semibold py-3 px-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50">
-              Join Waitlist
-            </span>
+          <Button
+            variant="default"
+            className="bg-gradient-to-r from-[#D247BF] to-primary text-white font-semibold py-3 px-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50"
+            type="submit"
+          >
+            <span className="">Join Waitlist</span>
           </Button>
         </form>
 
