@@ -13,9 +13,9 @@ export default function Waitlist() {
           <h2 className="text-3xl font-bold tracking-tight">
             Join the waitlist
           </h2>
-          <p className="mt-3 text-muted-foreground">
-            Be the first to know when we launch. Get early access to our
-            platform.
+          <p className="mt-3 text-muted-foreground font-bold">
+            Be the first to know when we launch. Get early access to the
+            extension.
           </p>
         </div>
 

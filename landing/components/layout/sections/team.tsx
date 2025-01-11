@@ -24,7 +24,7 @@ interface SocialNetworkProps {
 export const TeamSection = () => {
   const teamList: TeamProps[] = [
     {
-      imageUrl: "https://i.pravatar.cc/250?img=58",
+      imageUrl: "https://avatars.githubusercontent.com/u/108093728?v=4",
       firstName: "Pratham",
       lastName: "Dupare",
       positions: ["Software Developer", "React, Next.js, Node.js, Astro.js"],

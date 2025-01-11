@@ -1,14 +1,8 @@
-"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Waitlist from "@/components/ui/waitlist";
-import { ArrowRight } from "lucide-react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import Link from "next/link";
 
 export const HeroSection = () => {
-  const { theme } = useTheme();
   return (
     <section className="container w-full">
       <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
@@ -17,22 +11,30 @@ export const HeroSection = () => {
             <span className="mr-2 text-primary">
               <Badge>New</Badge>
             </span>
-            <span> Reminders made smarter with AI </span>
+            <span> Smarter bookmark management with AI </span>
           </Badge>
 
           <div className="max-w-screen-lg mx-auto text-center text-4xl md:text-6xl font-bold">
             <h1>
-              Stay on top with
-              <span className="text-transparent px-2 bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text">
-                AI-powered BookMark
+              Organize and remember with
+              <br />
+              <span className="text-transparent px-2 bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text block">
+                AI-powered BookMark reminders
               </span>
-              reminders
             </h1>
           </div>
 
           <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
             {`NudgeMark helps you never miss your important bookmarks and watch-later items with AI-powered reminders. Stay organized effortlessly!`}
           </p>
+
+          <Button
+            disabled
+            className="bg-gradient-to-r from-[#D247BF] to-primary text-white font-semibold py-3 px-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-xl active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary focus:ring-opacity-50"
+          >
+            Download Extension{" "}
+            <span className="text-xs ml-2">(Coming soon!)</span>
+          </Button>
 
           <div className="space-y-4 md:space-y-0 md:space-x-4">
             {/*
