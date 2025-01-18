@@ -1,9 +1,12 @@
 // src/popup.tsx
+import "../style.css"
+
 import { useEffect, useState } from "react"
 
 import { Storage } from "@plasmohq/storage"
 
 import type { AuthStatus } from "./background"
+import { Button } from "./components/ui/button"
 
 function IndexPopup() {
   const [authStatus, setAuthStatus] = useState<AuthStatus>({
@@ -45,9 +48,10 @@ function IndexPopup() {
   return (
     <div className="p-4">
       {authStatus.isAuthenticated ? (
-        <div>
+        <div className="bg-red-500">
           <h2 className="font-bold">Logged In</h2>
           <p>Welcome, {authStatus.user?.name}</p>
+          <Button>Hello</Button>
         </div>
       ) : (
         <div>
