@@ -27,3 +27,5 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
 }
 
 setInterval(checkAuthStatus, 3600000) 
+
+
