@@ -24,10 +24,10 @@ function IndexPopup() {
 
   const handleSignIn = () => {
     try {
-//      new Notification("Trying to Sign In!", {
- //       body: "This is a notification from your browser.",
-  //      icon: "https://via.placeholder.com/64" // Optional icon
-   //   })
+      //      new Notification("Trying to Sign In!", {
+      //       body: "This is a notification from your browser.",
+      //      icon: "https://via.placeholder.com/64" // Optional icon
+      //   })
       window.open("http://localhost:3000/signup", "_blank")
     } catch (e) {
       console.log(e)
