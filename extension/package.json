@@ -10,6 +10,7 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.13.0",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-separator": "^1.1.1",
@@ -43,7 +44,8 @@
     "permissions": [
       "cookies",
       "bookmarks",
-      "notifications"
+      "notifications",
+      "tabs"
     ]
   }
 }
