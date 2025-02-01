@@ -32,6 +32,11 @@ function NotificationSettings() {
         message: "This is a test notification from NudgeMark!"
       }
     })
+
+    new Notification("Hey there!!", {
+      body: "This is a notification from your browser.",
+      icon: "https://via.placeholder.com/64" // Optional icon
+    })
   }
 
   return (
@@ -61,5 +66,5 @@ function NotificationSettings() {
   )
 }
 
-export default NotificationSettings;
+export default NotificationSettings
 // Add this component to your existing popup where needed

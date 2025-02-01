@@ -2,7 +2,8 @@
 import { Storage } from "@plasmohq/storage"
 
 const storage = new Storage()
-
+// background/index.ts
+console.log("Background service worker loaded.");
 export type AuthStatus = {
   isAuthenticated: boolean
   user?: {
@@ -26,6 +27,4 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
   }
 }
 
-setInterval(checkAuthStatus, 3600000) 
-
-
+setInterval(checkAuthStatus, 3600000)

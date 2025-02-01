@@ -6,7 +6,6 @@ import { useEffect, useState } from "react"
 import { Storage } from "@plasmohq/storage"
 
 import type { AuthStatus } from "./background"
-import NotificationSettings from "./components/NotificationSettings"
 import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
 import { Separator } from "./components/ui/separator"
@@ -21,17 +20,10 @@ function IndexPopup() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [bookmarksLoading, setBookmarksLoading] = useState(true)
+  const [aiReminder, setAiReminder] = useState<string | null>(null) // AI reminder state
 
   const handleSignIn = () => {
-    try {
-      //      new Notification("Trying to Sign In!", {
-      //       body: "This is a notification from your browser.",
-      //      icon: "https://via.placeholder.com/64" // Optional icon
-      //   })
-      window.open("http://localhost:3000/signup", "_blank")
-    } catch (e) {
-      console.log(e)
-    }
+    window.open("http://localhost:3000/signup", "_blank")
   }
 
   useEffect(() => {
@@ -92,6 +84,51 @@ function IndexPopup() {
       bookmark.url?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const handleAiReminder = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/bookmarks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          bookmarks: filteredBookmarks,
+          preferences: {
+            /* User preferences */
+          }
+        }),
+        credentials: "include" // Ensure cookies are included if needed
+      })
+
+      const data = await response.json()
+
+      // Parse the reminder if it's a string
+      let reminder = data.reminder
+      if (typeof reminder === "string") {
+        try {
+          reminder = JSON.parse(reminder)
+        } catch (error) {
+          console.error("Error parsing reminder:", error)
+          reminder = null
+        }
+      }
+
+      if (reminder && reminder.title) {
+        setAiReminder(reminder.title)
+        new Notification("Reminder! You have missed your Bookmark!", {
+          body: `${reminder.title} ${reminder.url}`,
+          icon: "https://via.placeholder.com/64"
+        })
+      } else {
+        console.error("Invalid reminder format:", reminder)
+        setAiReminder("No reminder available")
+      }
+    } catch (error) {
+      console.error("Error fetching AI reminder:", error)
+      setAiReminder("Failed to fetch reminder")
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[200px] w-[300px] items-center justify-center p-4">
@@ -120,7 +157,6 @@ function IndexPopup() {
           </div>
 
           <Separator className="my-4" />
-          <NotificationSettings />
 
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -169,6 +205,13 @@ function IndexPopup() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* AI Reminder Section */}
+          <div className="mt-4">
+            <Button variant="default" onClick={handleAiReminder}>
+              Get Bookmark Reminder
+            </Button>
           </div>
         </div>
       ) : (
