@@ -15,6 +15,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "groq-sdk": "^0.12.0",
+    "loops": "^4.0.0",
     "lucide-react": "^0.469.0",
     "next": "15.1.4",
     "node-appwrite": "^14.1.0",

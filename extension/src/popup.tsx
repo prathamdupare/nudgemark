@@ -212,11 +212,6 @@ function IndexPopup() {
             <Button variant="default" onClick={handleAiReminder}>
               Get Bookmark Reminder
             </Button>
-            {aiReminder && (
-              <div className="mt-2 text-sm text-muted-foreground">
-                <strong>AI Reminder:</strong> {aiReminder}
-              </div>
-            )}
           </div>
         </div>
       ) : (
