@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { FooterSection } from "@/components/layout/sections/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
 
           {children}
 
+      <FooterSection />
           <Toaster />
         </ThemeProvider>
       </body>

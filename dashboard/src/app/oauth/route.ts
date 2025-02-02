@@ -14,9 +14,8 @@ export async function GET(request: NextRequest) {
     secret as string,
   );
 
-  // Await cookies() to properly handle it
   const cookiesInstance = await cookies();
-  cookiesInstance.set("my-custom-session", session.secret, {
+  cookiesInstance.set("nudgemark-session", session.secret, {
     path: "/",
     httpOnly: true,
     sameSite: "strict",
