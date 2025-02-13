@@ -4,44 +4,58 @@ import { Client, Account } from "node-appwrite";
 import { cookies } from "next/headers";
 
 export async function createSessionClient() {
-  const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT as string);
+  try {
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT as string);
 
-  const cookiesInstance = await cookies(); // Ensure cookies() is awaited
-  const session = cookiesInstance.get("nudgemark-session");
+    const cookiesInstance = await cookies();
+    const session = cookiesInstance.get("nudgemark-session");
 
-  if (!session || !session.value) {
-    throw new Error("No session");
+    if (!session || !session.value) {
+      return null;
+    }
+
+    client.setSession(session.value);
+
+    return {
+      get account() {
+        return new Account(client);
+      },
+    };
+  } catch (error) {
+    console.error("Error creating session client:", error);
+    return null;
   }
-
-  client.setSession(session.value);
-
-  return {
-    get account() {
-      return new Account(client);
-    },
-  };
 }
 
 export async function createAdminClient() {
-  const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT as string)
-    .setKey(process.env.NEXT_APPWRITE_KEY as string);
+  try {
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT as string)
+      .setKey(process.env.NEXT_APPWRITE_KEY as string);
 
-  return {
-    get account() {
-      return new Account(client);
-    },
-  };
+    return {
+      get account() {
+        return new Account(client);
+      },
+    };
+  } catch (error) {
+    console.error("Error creating admin client:", error);
+    return null;
+  }
 }
 
 export async function getLoggedInUser() {
   try {
-    const { account } = await createSessionClient();
-    return await account.get();
+    const sessionClient = await createSessionClient();
+    if (!sessionClient) {
+      return null;
+    }
+    return await sessionClient.account.get();
   } catch (error) {
+    console.error("Error getting logged in user:", error);
     return null;
   }
 }

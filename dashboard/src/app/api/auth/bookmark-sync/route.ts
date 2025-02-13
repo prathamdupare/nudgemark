@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from "node-appwrite";
+import { Client, Databases, ID, Query, Models } from "node-appwrite";
 import { getLoggedInUser } from "@/lib/server/appwrite";
 import { NextResponse } from "next/server";
 
@@ -11,6 +11,23 @@ interface ChromeBookmark {
   dateAdded?: number;
 }
 
+interface BookmarkDocument extends Models.Document {
+  userId: string;
+  title: string;
+  url: string;
+  index: number;
+  dateAdded: string;
+  lastSync: string;
+}
+
+interface SyncResponse {
+  message: string;
+  totalProcessed: number;
+  created: number;
+  updated: number;
+  bookmarks: BookmarkDocument[];
+}
+
 export async function POST(req: Request) {
   try {
     const user = await getLoggedInUser();
@@ -18,7 +35,7 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { error: "User is not authenticated." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -27,7 +44,7 @@ export async function POST(req: Request) {
     if (!bookmarks || !Array.isArray(bookmarks)) {
       return NextResponse.json(
         { error: "Invalid bookmarks data format." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -39,81 +56,83 @@ export async function POST(req: Request) {
     const databases = new Databases(client);
 
     // Process bookmarks with URL only
-    const validBookmarks = bookmarks.filter((bookmark) => bookmark.url);
+    const validBookmarks = bookmarks.filter(
+      (bookmark): bookmark is ChromeBookmark & { url: string } =>
+        bookmark.url !== undefined,
+    );
 
     const results = await Promise.all(
       validBookmarks.map(async (bookmark) => {
         try {
           // Check if bookmark already exists
-          const existingBookmarks = await databases.listDocuments(
-            process.env.NEXT_APPWRITE_DATABASE_ID!,
-            process.env.NEXT_APPWRITE_BOOKMARKS_COLLECTION_ID!,
-            [
-              Query.equal("userId", user.$id),
-              Query.equal("url", bookmark.url!)
-            ]
-          );
+          const existingBookmarks =
+            await databases.listDocuments<BookmarkDocument>(
+              process.env.NEXT_APPWRITE_DATABASE_ID!,
+              process.env.NEXT_APPWRITE_BOOKMARKS_COLLECTION_ID!,
+              [
+                Query.equal("userId", user.$id),
+                Query.equal("url", bookmark.url),
+              ],
+            );
 
           const documentData = {
             userId: user.$id,
             title: bookmark.title || "",
-            url: bookmark.url!,
+            url: bookmark.url,
             index: bookmark.index,
             dateAdded: bookmark.dateAdded
               ? new Date(bookmark.dateAdded).toISOString()
               : new Date().toISOString(),
-            lastSync: new Date().toISOString()
+            lastSync: new Date().toISOString(),
           };
 
           if (existingBookmarks.documents.length > 0) {
             // Update existing bookmark
             const existingBookmark = existingBookmarks.documents[0];
-            return await databases.updateDocument(
+            return await databases.updateDocument<BookmarkDocument>(
               process.env.NEXT_APPWRITE_DATABASE_ID!,
               process.env.NEXT_APPWRITE_BOOKMARKS_COLLECTION_ID!,
               existingBookmark.$id,
-              documentData
+              documentData,
             );
           } else {
             // Create new bookmark
-            return await databases.createDocument(
+            return await databases.createDocument<BookmarkDocument>(
               process.env.NEXT_APPWRITE_DATABASE_ID!,
               process.env.NEXT_APPWRITE_BOOKMARKS_COLLECTION_ID!,
               ID.unique(),
-              documentData
+              documentData,
             );
           }
-        } catch (error: any) {
-          console.error(
-            `Error processing bookmark ${bookmark.title}:`,
-            error.message
-          );
+        } catch (error) {
+          console.error(`Error processing bookmark ${bookmark.title}:`, error);
           return null;
         }
-      })
+      }),
     );
 
-    const successfulResults = results.filter((result) => result !== null);
+    const successfulResults = results.filter(
+      (result): result is BookmarkDocument => result !== null,
+    );
     const updatedCount = successfulResults.filter(
-      (result) => result!.$updatedAt !== result!.$createdAt
+      (result) => result.$updatedAt !== result.$createdAt,
     ).length;
     const createdCount = successfulResults.length - updatedCount;
 
-    return NextResponse.json(
-      {
-        message: "Bookmarks synced successfully",
-        totalProcessed: successfulResults.length,
-        created: createdCount,
-        updated: updatedCount,
-        bookmarks: successfulResults
-      },
-      { status: 200 }
-    );
+    const response: SyncResponse = {
+      message: "Bookmarks synced successfully",
+      totalProcessed: successfulResults.length,
+      created: createdCount,
+      updated: updatedCount,
+      bookmarks: successfulResults,
+    };
+
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("Error syncing bookmarks:", error);
     return NextResponse.json(
       { error: "Failed to sync bookmarks." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

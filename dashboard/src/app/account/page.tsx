@@ -1,5 +1,3 @@
-// src/app/account/page.jsx
-
 import { createSessionClient, getLoggedInUser } from "@/lib/server/appwrite";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -20,7 +18,7 @@ async function signOut() {
   const { account } = await createSessionClient();
 
   const cookiesInstance = await cookies();
-  cookiesInstance.delete("my-custom-session");
+  cookiesInstance.delete("nudgemark-session");
   await account.deleteSession("current");
 
   redirect("/signup");
