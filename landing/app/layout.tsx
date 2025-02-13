@@ -6,6 +6,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { FooterSection } from "@/components/layout/sections/footer";
+import PlausibleProvider from "next-plausible";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,20 +23,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
+      <Head>
+        <script
+          defer
+          data-domain="nudgemark.com"
+          src="https://analytics.fosspage.tech/js/script.js"
+        ></script>
+      </Head>
       <body className={cn("min-h-screen bg-background", inter.className)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+        <PlausibleProvider
+          domain="nudgemark.com"
+          selfHosted
+          customDomain="https://analytics.fosspage.tech/js/script.hash.outbound-links.pageview-props.tagged-events.js"
+          taggedEvents
         >
-          <Navbar />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
 
-          {children}
+            {children}
 
-      <FooterSection />
-          <Toaster />
-        </ThemeProvider>
+            <FooterSection />
+            <Toaster />
+          </ThemeProvider>
+        </PlausibleProvider>
       </body>
     </html>
   );
