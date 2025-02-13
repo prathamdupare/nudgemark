@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { FooterSection } from "@/components/layout/sections/footer";
 import PlausibleProvider from "next-plausible";
 import Head from "next/head";
+import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,13 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <Head>
-        <script
-          defer
-          data-domain="nudgemark.com"
-          src="https://analytics.fosspage.tech/js/script.js"
-        ></script>
-      </Head>
+      <Script
+        defer
+        data-domain="nudgemark.com"
+        src="https://analytics.fosspage.tech/js/script.js"
+      />
       <body className={cn("min-h-screen bg-background", inter.className)}>
         <PlausibleProvider
           domain="nudgemark.com"
