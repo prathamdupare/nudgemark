@@ -43,7 +43,12 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <PlausibleProvider domain="nudgemark.com">
+    <PlausibleProvider
+      domain="nudgemark.com"
+      selfHosted
+      customDomain="https://analytics.fosspage.tech/js/script.hash.outbound-links.pageview-props.tagged-events.js"
+      taggedEvents
+    >
       <HeroSection />
       {/*<SponsorsSection />  */}
       <BenefitsSection />
