@@ -6,7 +6,7 @@ import { ID } from "node-appwrite";
 import { createAdminClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { signUpWithGithub } from "@/lib/server/oauth";
+import { signUpWithGithub, signUpWithGoogle } from "@/lib/server/oauth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -116,6 +116,13 @@ export default async function SignUpPage() {
 
             {/* GitHub Sign Up Form */}
             <form action={signUpWithGithub}>
+              <Button variant="outline" className="w-full" type="submit">
+                <Github className="mr-2 h-4 w-4" />
+                Sign up with GitHub
+              </Button>
+            </form>
+
+            <form action={signUpWithGoogle}>
               <Button variant="outline" className="w-full" type="submit">
                 <Github className="mr-2 h-4 w-4" />
                 Sign up with GitHub

@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getLoggedInUser } from "@/lib/server/appwrite";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export async function AppSidebar() {
   const user = await getLoggedInUser();
@@ -31,10 +32,10 @@ export async function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="/dashboard">
+              <Link href="/">
                 <BookMarked className="h-4 w-4" />
                 <span>All Bookmarks</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>

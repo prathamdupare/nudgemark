@@ -1,4 +1,5 @@
 import { BenefitsSection } from "@/components/layout/sections/benefits";
+import PlausibleProvider from "next-plausible";
 import { CommunitySection } from "@/components/layout/sections/community";
 import { ContactSection } from "@/components/layout/sections/contact";
 import { FAQSection } from "@/components/layout/sections/faq";
@@ -42,7 +43,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <>
+    <PlausibleProvider domain="nudgemark.com">
       <HeroSection />
       {/*<SponsorsSection />  */}
       <BenefitsSection />
@@ -54,6 +55,6 @@ export default function Home() {
       {/*   <PricingSection /> */}
       {/*<ContactSection /> */}
       <FAQSection />
-    </>
+    </PlausibleProvider>
   );
 }
